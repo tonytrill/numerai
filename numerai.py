@@ -1,25 +1,43 @@
 # -*- coding: utf-8 -*-
 """
 Numerai Predicitive Modeling
+Tony Silva
 """
-
 import pandas as pd
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.metrics import log_loss
-training_set = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
-prediction_set = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_tournament_data.csv", index_col="id")
-val = prediction_set.loc[prediction_set.data_type == "validation",]
+import seaborn as sns
+import matplotlib.pyplot as plt
 
+train = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
+test = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_tournament_data.csv", index_col="id")
+# Concatenate Datasets to look at data preprocessing
+df = pd.concat([train, test], axis=0)
 
-training_set = training_set.drop("era", 1)
-training_set = training_set.drop("data_type", 1)
-val = val.drop("era",1)
-val = val.drop("data_type",1)
+# Data Understanding
+# Two data sets given by Numerai
+# Training and Test, test set contains validation, test, and live
+# validation is used for leaderboard scores, test and live is used for scoring and payouts
+# test and live data do not have labels.
+# 154,025 rows of total data
+# 24 columns, 21 features
+# training set contains 108,405 rows
+# test set has 45,620 rows
+# Of the test set, validation has 16,686 rows, and test 27693, live has 1241
+print(df.shape, "total dataframe shape")
+print(train.shape, "train dataframe shape")
+print(test.shape, "total test dataframe shape")
+print(test.loc[test.data_type == "live",:].shape, "live dataframe shape")
+print(test.loc[test.data_type == "test",:].shape, "test dataframe shape")
+print(test.loc[test.data_type == "validation",:].shape, "validation dataframe shape")
 
+# No Missing Values in the features, only in the target
+# Makes sense because we combined training and tests sets in one df
+print(df.isnull().sum())
 
-clf = AdaBoostClassifier()
-clf.fit(training_set.iloc[:,:-1], training_set.iloc[:,-1])
-predictions = clf.predict(val.iloc[:,:-1])
-actual = val.iloc[:,-1]
+# Create histograms for every column in the dataframe
+# Commented out due to slow output
+cols = df.columns.values[2:]
+#for i in cols:
+#    plt.figure()
+#    df[i].plot.hist()
 
-print(log_loss(actual, predictions))
+sns.pairplot(train[["feature1", "target"]], hue="target")
