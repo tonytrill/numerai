@@ -6,6 +6,9 @@ Tony Silva
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn import tree
+from IPython.display import Image
+
 
 train = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
 test = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_tournament_data.csv", index_col="id")
@@ -35,9 +38,39 @@ print(df.isnull().sum())
 
 # Create histograms for every column in the dataframe
 # Commented out due to slow output
-cols = df.columns.values[2:]
-#for i in cols:
-#    plt.figure()
-#    df[i].plot.hist()
+cols = df.columns.values[2:-1]
+def plotHists(cols):
+   for i in cols:
+       plt.figure()
+       train[i].plot.hist()
+       plt.show()
+       plt.close()
 
-sns.pairplot(train[["feature1", "target"]], hue="target")
+# Target has the nearly the same amount for 0 and 1 
+print(df.groupby(["target"]).count())
+# Boxplots of each feature for the target value. 
+# Looking to see if there are any significant differences between target 0 and target 1
+# for each of the different features
+def plotFeatureTargets():
+    for i in cols:
+        plt.figure()
+        z = "Boxplot of Target Values on " + i
+        sns.boxplot(x="target", y=i ,data=train[[i, "target"]]).set_title(z)
+        plt.show()
+        plt.close()
+
+# Averages for each feature is almost similar.
+print(train.groupby(["target"])["feature1"].mean())
+print(train.groupby(["target"])["feature1"].std())
+
+# Implement Simple Decision Tree to determine feature interactions
+clf = tree.DecisionTreeClassifier()
+clf.fit(train[cols], train["target"])
+
+dot_data = tree.export_graphviz(clf, out_file=None, 
+                         feature_names=train[cols].feature_names,  
+                         class_names=train["target"].target_names,  
+                         filled=True, rounded=True,  
+                         special_characters=True)  
+graph = pydotplus.graph_from_dot_data(dot_data)  
+Image(graph.create_png()) 
