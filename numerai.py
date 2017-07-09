@@ -3,11 +3,12 @@
 Numerai Predicitive Modeling
 Tony Silva
 """
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn import tree
-from IPython.display import Image
+from sklearn.preprocessing import PolynomialFeatures
+
 
 
 train = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
@@ -58,19 +59,23 @@ def plotFeatureTargets():
         sns.boxplot(x="target", y=i ,data=train[[i, "target"]]).set_title(z)
         plt.show()
         plt.close()
-
-# Averages for each feature is almost similar.
+plotFeatureTargets()
+# Averages for most features are almost similar.
 print(train.groupby(["target"])["feature1"].mean())
 print(train.groupby(["target"])["feature1"].std())
+# From R analysis, the means of each target are statistically different
+print(train.groupby(["target"])["feature2"].mean())
+print(train.groupby(["target"])["feature2"].std())
+print(train.groupby(["target"])["feature3"].mean())
+print(train.groupby(["target"])["feature3"].std())
+# Generate Correlation Matrix
+plt.figure()
+sns.heatmap(train.corr())
+plt.show()
+plt.close()
 
-# Implement Simple Decision Tree to determine feature interactions
-clf = tree.DecisionTreeClassifier()
-clf.fit(train[cols], train["target"])
+# Generate polynomial features
+poly = PolynomialFeatures()
+new = pd.DataFrame(poly.fit_transform(train[cols]))
+train = pd.concat([train["target"], new], axis=0)
 
-dot_data = tree.export_graphviz(clf, out_file=None, 
-                         feature_names=train[cols].feature_names,  
-                         class_names=train["target"].target_names,  
-                         filled=True, rounded=True,  
-                         special_characters=True)  
-graph = pydotplus.graph_from_dot_data(dot_data)  
-Image(graph.create_png()) 
