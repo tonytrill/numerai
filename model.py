@@ -1,47 +1,73 @@
 # -*- coding: utf-8 -*-
 """
-Numerai Predicitive Modeling
-Tony Silva
+Build a model that to predict the liklihood of a training sample being 
+in the tournament data set.
 """
-
 import pandas as pd
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.metrics import log_loss
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
+from sklearn.metrics import log_loss, classification_report, confusion_matrix
 from sklearn.linear_model import LogisticRegression
-from xgboost import XGBClassifier
-from sklearn.model_selection import RandomizedSearchCV
-import scipy.stats as st
-
-# Using training data provided by Numerai as model creation.
-# Using the tournament data as "submit" data.
+from sklearn.neighbors import KNeighborsClassifier
 df = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
 submit = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_tournament_data.csv", index_col="id")
-x = df.columns.values[2:-1]
-y = df.columns.values[-1]
+
+def create_features(df):
+    df["feat19sq"]= df["feature19"]*df["feature19"]
+    df["feat10x19"] = df["feature10"]*df["feature19"]
+    df["feat10x8"] = df["feature10"]*df["feature8"]
+    df["feat9x19x10x8"] = df["feature9"]*df["feature19"]*df["feature10"]*df["feature8"]
+    df["feat19x4"] = df["feature19"]*df["feature4"]
+    df["feat19x7x4x21"] = df["feature19"]*df["feature7"]*df["feature4"]* df["feature21"]
+    df["feat16sq"] = df["feature16"]*df["feature16"]
+    df["feat12sq"] = df["feature12"]*df["feature12"]
+    df["feat7x13"] = df["feature7"]*df["feature13"]
+    df["feat16x12"] = df["feature12"]*df["feature16"]
+    df["feat13x4x11"] = df["feature11"]*df["feature13"]*df["feature4"]
+    df["feat16x5x6"] = df["feature16"]*df["feature5"]*df["feature6"]
+    df["feat15sq"] = df["feature15"]*df["feature15"]
+    df["feat11sq"] = df["feature11"]*df["feature11"]
+    df["feat5sq"] = df["feature5"]*df["feature5"]
+    df["feat15x11x5"] = df["feature15"]*df["feature11"]*df["feature5"]
+    df["feat5x10x6"] = df["feature5"]*df["feature10"]*df["feature6"]
+    cols = df.columns.values.tolist()
+    cols.insert(0, cols.pop(cols.index('target')))
+    df = df.reindex(columns=cols)
+    return df
+
+def make_response(row):
+    if row["data_type"] == "train":
+        return 0
+    else:
+        return 1
+# Create features for our training and tests sets.
+df = create_features(df)
+submit = create_features(submit)
+samp = df.sample(50000)
+total = pd.concat([samp,submit], axis=0)
+total["response"] = total.apply(lambda row: make_response(row), axis=1)
+
+train, test = train_test_split(total, test_size=.3, random_state=44)
+x_train = train.iloc[:,3:-1]
+y_train = train["response"]
+x_test = test.iloc[:,3:-1]
+y_test = test["response"]
+
+model = KNeighborsClassifier(n_neighbors = 100,n_jobs=-1, algorithm="auto")
+model.fit(x_train, y_train)
+
+x_test = df.iloc[:,3:]
+predictions = model.predict_proba(x_test)
+#predict = model.predict(x_test)
+#print(log_loss(y_test, predictions))
+#print(confusion_matrix(y_test,predict))
 
 
-logreg = LogisticRegression(n_jobs=-1, solver="sag")
-#scores = cross_val_score(logreg, df[x], df[y], cv=10, scoring="neg_log_loss")
-#print(scores.mean())
-one_to_left = st.beta(10, 1)  
-from_zero_positive = st.expon(0, 50)
+preds = []
+for j in (i[1] for i in predictions):
+    preds.append(j)
+preds = np.array(preds)
+df["preds"] = preds
 
-params = {  
-    "n_estimators": st.randint(3, 40),
-    "max_depth": st.randint(3, 40),
-    "learning_rate": st.uniform(0.05, 0.4),
-    "colsample_bytree": one_to_left,
-    "subsample": one_to_left,
-    "gamma": st.uniform(0, 10),
-    'reg_alpha': from_zero_positive,
-    "min_child_weight": from_zero_positive,
-}
-
-model = XGBClassifier()
-
-train, test = train_test_split(df, test_size=.3)
-gs = RandomizedSearchCV(model, params, n_jobs=-1)  
-gs.fit(train[x], train[y])  
-print(gs.get_params)
-print(gs.best_model_)
-
+df.preds.hist()

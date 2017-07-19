@@ -7,9 +7,8 @@ Tony Silva
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import PolynomialFeatures
-
-
+from sklearn import svm
+from sklearn.model_selection import train_test_split
 
 train = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
 test = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_tournament_data.csv", index_col="id")
@@ -73,9 +72,3 @@ plt.figure()
 sns.heatmap(train.corr())
 plt.show()
 plt.close()
-
-# Generate polynomial features
-poly = PolynomialFeatures()
-new = pd.DataFrame(poly.fit_transform(train[cols]))
-train = pd.concat([train["target"], new], axis=0)
-
