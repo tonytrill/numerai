@@ -45,6 +45,8 @@ def make_response(row):
 df = create_features(df)
 submit = create_features(submit)
 samp = df.sample(50000)
+# Over sample Testing Data using sampling with replacement
+submit = submit.sample(60000, replace=True)
 total = pd.concat([samp,submit], axis=0)
 total["response"] = total.apply(lambda row: make_response(row), axis=1)
 
@@ -69,5 +71,9 @@ for j in (i[1] for i in predictions):
     preds.append(j)
 preds = np.array(preds)
 df["preds"] = preds
-
 df.preds.hist()
+df["prediction"] = 0
+df.loc[df.preds >.4, "prediction"] = 1
+train = df.loc[df.prediction == 1,df.columns.values[:-2]]
+train.to_csv("C:/Users/Anthony Silva/silvat/numerai/train.csv")
+

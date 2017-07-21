@@ -13,7 +13,8 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
 
-df = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
+#df = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", index_col="id")
+df = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/train.csv", index_col="id")
 submit = pd.read_csv("C:/Users/Anthony Silva/silvat/numerai/numerai_tournament_data.csv", index_col="id")
 # Concatenate Datasets to look at data preprocessing
 
