@@ -17,7 +17,7 @@ Numerai has many different criteria to assess if a data scientist's predictions 
 In this project both R and Python were utilized. R was utilized more for Feature Engineering, while Python was utilized for the creation of the predictive model. Usually, I would stick with one language for a project, however, for the sake of gaining more experience I utilized both. The machine learning problem for this challenge was binary classification.
 
 ### Exploratory Data Analysis
-The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values were closely distributed.
+The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. This data set was called their "Tournament Data". The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values had roguhly the same number of observations.
 
 ```
 print(df.groupby(["target"]).count())
@@ -28,8 +28,9 @@ print(df.groupby(["target"]).count())
 | 0             | 62122         |
 | 1             | 62969         |
 
+Each of the data sets provided an id column, that labeled each observation. A data_type column specifiying what type of observation it was: train, validation, test or live. An era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled "feature1", "feature2" ... "feature21".
 
-##### Missing Values
+#### Missing Values
 Thankfully there were no missing values found in the data set. I utilized the following command to find any.
 
 ```
@@ -37,7 +38,7 @@ print(df.isnull().sum())
 ```
 
 #### Feature Engineering
-Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible.
+Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features. I created 
 
 ### Predictive Modeling
 
