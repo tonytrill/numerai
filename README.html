@@ -159,6 +159,8 @@ $(document).ready(function () {
 </tbody>
 </table>
 <p>Each of the data sets provided an id column, that labeled each observation. A data_type column specifiying what type of observation it was: train, validation, test or live. An era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled “feature1”, “feature2” … “feature21”.</p>
+<p>All of the features’ values fall between the range of [0,1]. For all of the features, the distributions appear to follow a normal distribution. The density plot of feature1 describes pretty well what is seen across all features, however, with different variability and size of the “bell” in the bell curve. An example can be seen below:</p>
+<p><a href="/images/distribution.png">feature1 distribution</a></p>
 <div id="missing-values" class="section level4">
 <h4>Missing Values</h4>
 <p>Thankfully there were no missing values found in the data set. I utilized the following command to find any.</p>
@@ -166,7 +168,7 @@ $(document).ready(function () {
 </div>
 <div id="feature-engineering" class="section level4">
 <h4>Feature Engineering</h4>
-<p>Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features. I created</p>
+<p>Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features.</p>
 </div>
 </div>
 <div id="predictive-modeling" class="section level3">

@@ -56,6 +56,8 @@ for (i in 1:(dim(X)[2]))
   }
 }
 
+ggplot(data = X, aes(x=feature1)) + geom_density()
+
 # Fit a XGBoost model to find more features
 install.packages("DiagrammeR")
 library(DiagrammeR)
