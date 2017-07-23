@@ -32,7 +32,7 @@ Each of the data sets provided an id column, that labeled each observation. A da
 
 All of the features' values fall between the range of [0,1]. For all of the features, the distributions appear to follow a normal distribution. The density plot of feature1 describes pretty well what is seen across all features, however, with different variability and size of the "bell" in the bell curve. An example can be seen below:
 
-![feature1 distribution](/images/distribution.png)
+![feature1 distribution](https://github.com/silv6928/numerai/blob/master/images/distribution.png)
 
 
 #### Missing Values
