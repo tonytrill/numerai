@@ -5,7 +5,11 @@
 ## Introduction (Numerai Challenge Description)
 The Numerai Machine Learning Challenge is a relatively new challenge offered by the organization Numerai. The challenge can be found on https://numer.ai. The challenge attempts to bring many different data science minds together to make predictions against the same data set. Much like Kaggle, Numerai has a leader and the opportunity to win money by using Data Science skills.
 
+<<<<<<< HEAD
 In the Numerai Challenge, data scientists make predictions against Numerai's encrypted hedge fund data. Numerai then ensemble's the predictions provided by the data scientists in the challenge to generate a meta model. This meta model is then used to make predictions to improve Numerai's hedge fund. From the article, "https://medium.com/numerai/invisible-super-intelligence-for-the-stock-market-3c64b57b244c", "Numerai is able to combine each model into a meta model just like Random Forests combine decision trees into a forest". With this ensemble of predictions Numerai is able to perform better than any one model given to them. They are not looking for "best" overall model but they are looking for many different "good" models that helps with their overall meta model.
+=======
+In the Numerai Challenge, data scientists make predictions against Numerai's encrpyted hedge fund data. Numerai then ensemble's the predictions provided by the data scientists in the challenge to generate a meta model. This meta model is then used to make predictions to improve Numerai's hedge fund. From the article, "https://medium.com/numerai/invisible-super-intelligence-for-the-stock-market-3c64b57b244c", "Numerai is able to combine each model into a meta model just like Random Forests combine decision trees into a forest". With this ensemble of predictions Numerai is able to perform better than any one model given to them. They are not looking for "best" overall model but they are looking for many different "good" models that helps with their overall meta model.
+>>>>>>> e36e0c6b9991b169cd7d7b7d9a02e63a1065c19e
 
 Numerai has many different criteria to assess if a data scientist's predictions add to their meta model. 
 * Log Loss - On average the model must perform better than -ln(.5) ~ .693.
