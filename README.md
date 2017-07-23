@@ -17,21 +17,34 @@ Numerai has many different criteria to assess if a data scientist's predictions 
 In this project both R and Python were utilized. R was utilized more for Feature Engineering, while Python was utilized for the creation of the predictive model. Usually, I would stick with one language for a project, however, for the sake of gaining more experience I utilized both. The machine learning problem for this challenge was binary classification.
 
 ### Exploratory Data Analysis
-The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1.
+The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values were closely distributed.
+
+```
+print(df.groupby(["target"]).count())
+```
+
+| Target        | Count         |
+| ------------- |:-------------:|
+| 0             | 62122         |
+| 1             | 62969         |
+
 
 ##### Missing Values
 Thankfully there were no missing values found in the data set. I utilized the following command to find any.
 
-'''
+```
 print(df.isnull().sum())
-
-'''
+```
 
 #### Feature Engineering
+Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible.
 
 ### Predictive Modeling
+
 #### Sampling Approach
+
 #### Neural Network Creation
+
 #### Sampling Re-Approach &  K-Nearest Neighbors Classifier
 
 ## Final Performance
