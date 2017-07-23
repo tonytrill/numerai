@@ -45,7 +45,7 @@ def plotHists(cols):
        train[i].plot.hist()
        plt.show()
        plt.close()
-
+plotHists(cols)
 # Target has the nearly the same amount for 0 and 1 
 print(df.groupby(["target"]).count())
 # Boxplots of each feature for the target value. 
