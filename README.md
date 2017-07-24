@@ -30,17 +30,34 @@ print(df.groupby(["target"]).count())
 
 Each of the data sets provided an id column, that labeled each observation. A data_type column specifiying what type of observation it was: train, validation, test or live. An era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled "feature1", "feature2" ... "feature21".
 
+#### Missing Values
+Thankfully there were no missing values found in the data set. I utilized the following command to find any.
+```
+print(df.isnull().sum())
+```
+
 All of the features' values fall between the range of [0,1]. For all of the features, the distributions appear to follow a normal distribution. The density plot of feature1 describes pretty well what is seen across all features, however, with different variability and size of the "bell" in the bell curve. An example can be seen below:
 
 ![feature1 distribution](https://github.com/silv6928/numerai/blob/master/images/distribution.png)
 
-
-#### Missing Values
-Thankfully there were no missing values found in the data set. I utilized the following command to find any.
+Density distributions for each target value were observed for each of the features. This could help determine if the different target values followed a different distribution for any of the features.
 
 ```
-print(df.isnull().sum())
+names <- colnames(X)
+for (i in 1:(dim(X)[2]))
+{
+  if (names[i] != "target")
+  {
+    plot(density(X[X$target == 1,i]), main = names[i])
+    lines(density(X[X$target == 0, i]))
+  }
+}
 ```
+
+![feature6 density](https://github.com/silv6928/numerai/blob/master/images/density.png)
+I would have hoped to have seen two different distinct normal curves. This would have told me that for a given feature we could derive a differing distribution between the target values. This could have helped generate our predictive model. However, from the plot above for each feature, the target values followed the same distribution. The next approach was to determine correlations between features.
+
+
 
 #### Feature Engineering
 Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features.
