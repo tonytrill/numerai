@@ -75,7 +75,7 @@ plt.close()
 
 Produces the following Correlation Matrix.
 
-![correlation matrix](https://github.com/silv6928/numerai/blob/master/images/correlation.png)
+![correlation matrix](https://github.com/silv6928/numerai/blob/master/images/correlations.png)
 
 #### Feature Engineering
 Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features.
