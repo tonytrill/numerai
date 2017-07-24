@@ -58,7 +58,24 @@ for (i in 1:(dim(X)[2]))
 
 I would have hoped to have seen two different distinct normal curves. This would have told me that for a given feature we could derive a differing distribution between the target values. This could have helped generate our predictive model. However, from the plot above for each feature, the target values followed the same distribution. The next approach was to determine correlations between features.
 
+```
+library(ggplot2)
+library(reshape2)
+qplot(x=Var1, y=Var2, data=melt(cor(X[, !(names(X) %in% "target")])), fill = value, geom="tile")
+```
 
+or
+
+```
+plt.figure()
+sns.heatmap(train.corr())
+plt.show()
+plt.close()
+```
+
+Produces the following Correlation Matrix.
+
+![correlation matrix](https://github.com/silv6928/numerai/blob/master/images/correlation.png)
 
 #### Feature Engineering
 Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features.
