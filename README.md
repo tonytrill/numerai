@@ -152,7 +152,24 @@ As you can see, the model performed better than random guessing overall, however
 
 #### Sampling Re-Approach &  K-Nearest Neighbors Classifier
 
+In order to mitigate consistency issue I took two different approaches. First, I built a K-Nearest Neighbors Classifier to find training samples that are most like the samples in Numerai's leaderboard data. This included creating a different target variable as 0 in case a sample is in the training and 1 if the data resides in the Numerai leaderboard data. I then ran the classifier against the full training data and only selected those samples at a threshold.
 
+Split at .4
+![performance2](/images/performance2.PNG)
+
+If splitting out too much of the data the model ends up performing worse than before and performs poorly on consistency.
+
+Split at .5
+![bad performance](/images/badperformance5.PNG)
+
+Second, I looked at which eras were performing the worst in the leaderboard data. Of those eras I added them to the training data. My hopes would be the model would not be swayed to much by these samples but just enough to promote the consistency measure in the model. I felt this was a strong the right method to use because there were only a few thousand samples compared to the 75,000 true training samples .
 
 ## Final Performance
 
+After performing the methods in the previous section I was able to get the model to perform more consistent and meet all of Numerai's criteria.
+
+![performance3](/images/performance3addingvalidations.PNG)
+
+Now that my model is in contention to add to Numerai's meta model, I now have to wait for Numerai to score the "live" data in order to be considered for a payout.
+
+Overall, this was a great experience working with a brand new data set and applying Machine Learning Methods.
