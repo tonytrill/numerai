@@ -90,7 +90,7 @@ libaray(rattle)
 fit <- rpart(target ~ . , data=X , method="class", control=rpart.control(minsplit=1000, minbucket=1, cp=0.001))
 fancyRpartPlot(fit, sub = "")
 ```
-The visualization that was generated was then used to located potential important features and important interactions.
+The visualization that was generated was then used to locate potential important features and important interactions.
 
 ![simple decision tree](/images/simple_decision_tree.png)
 
@@ -114,15 +114,45 @@ xgb.plot.importance(importance_matrix=importance_matrix)
 
 Additionally the XGBoost package in R provides an easy way to measure true feature importance for the tree. By doing so, I was able to not only generate new features visually but also quantitatively. 
 
-Through this methodology I was able to generate new features in attempts to help aid the generation of a good predicitive model.
+Through this methodology I was able to generate new features in attempt to help aid the generation of a good predicitive model.
 
 ### Predictive Modeling
 
+In the predictive modeling step of the project I began with generating a basic logistic regression model. However, by the Numerai standards this model was not considered "good" because it failed the originality step of Numerai's model assessment. Since there are many predictions using logistic regression, there predictions are highly correlated and fail the orginality step. I decided I would go with building a Neural Network in attempts to pass this step in Numerai's measurements.
+
 #### Sampling Approach
+
+At first I split Numerai's training data into my own training and testing sets. I used 75% of the data as training with the rest as testing data. Numerai's dataset was then used to measure leaderboard performance. So in reality the Numerai "validation" set was my test set, while the testing set I made was actually a validation set used to not overfit the data.
 
 #### Neural Network Creation
 
+In order to create an efficient Nueral Network, I utilized the Keras Python library. The Keras library makes it very easy and efficient to build a Neural Network and get it up and running quickly. Along with Keras, I utilized Kera's compability with TensorFlow as a backend. After, scaling the data and splitting into my training and testing sets I created my Neural Network as follows:
+
+```
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+
+model = Sequential()
+
+model.add(Dense(38, activation='sigmoid', input_dim=38))
+model.add(Dense(24, activation='sigmoid'))
+model.add(Dense(12, activation='sigmoid'))
+model.add(Dense(8, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1)
+```
+
+The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to overfit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 over 20 iterations through the data. The fitted model performed well but not good enough.
+
+![nn performance](/images/performance1.png)
+
+As you can see, the model performed better than random guessing overall, however, it only performed better than random guessing on 66.66% of the eras in the leaderboard data. So Numerai considers my data not "consistent". I attempted to tune my model, however, even though I would reduce my overall log loss my consistency did not improve. So I was performing really well on some eras but not on others.
+
 #### Sampling Re-Approach &  K-Nearest Neighbors Classifier
+
+
 
 ## Final Performance
 
