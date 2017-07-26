@@ -17,7 +17,7 @@ Numerai has many different criteria to assess if a data scientist's predictions 
 In this project both R and Python were utilized. R was utilized more for Feature Engineering, while Python was utilized for the creation of the predictive model. Usually, I would stick with one language for a project, however, for the sake of gaining more experience I utilized both. The machine learning problem for this challenge was binary classification.
 
 ### Exploratory Data Analysis
-The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. This data set was called their "Tournament Data". The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values had roguhly the same number of observations.
+The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. This data set was called their "Tournament Data". The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values had roughly the same number of observations.
 
 ```
 print(df.groupby(["target"]).count())
@@ -28,7 +28,7 @@ print(df.groupby(["target"]).count())
 | 0             | 62122         |
 | 1             | 62969         |
 
-Each of the data sets provided an id column, that labeled each observation. A data_type column specifiying what type of observation it was: train, validation, test or live. An era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled "feature1", "feature2" ... "feature21".
+Each of the data sets provided an id column, that labeled each observation. A data_type column specifying what type of observation it was: train, validation, test or live. An era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled "feature1", "feature2" ... "feature21".
 
 #### Missing Values
 Thankfully there were no missing values found in the data set. I utilized the following command to find any.
@@ -78,7 +78,43 @@ Produces the following Correlation Matrix.
 ![correlation matrix](/images/correlations.png)
 
 #### Feature Engineering
-Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features.
+Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features, I used a combination of a classic decision tree and XGBoost Decision Trees.
+
+For the simple decision tree:
+
+```
+library(rpart)
+library(rpart.plot)
+libaray(rattle)
+# Generate simple decision tree to determine if any variables have interactions 
+fit <- rpart(target ~ . , data=X , method="class", control=rpart.control(minsplit=1000, minbucket=1, cp=0.001))
+fancyRpartPlot(fit, sub = "")
+```
+The visualization that was generated was then used to located potential important features and important interactions.
+
+![simple decision tree](/images/simple_decision_tree.jpg)
+
+Important features were identified as those that repeat multiple times in the tree as a whole or on specific branches of the tree. Important interactions were identified as those features that reoccurred on branches together. I was then able to come up with additional features by feature transformation by squaring or cubing features that were found to be important and multiplying important interactions together.
+
+A more extensive approach was taken using XGBoost. I first looked at only the 1-depth trees, then 2-depth trees, all the way to 5 depth trees. At each step in the analysis I looked for important features and important feature interactions. I made sure to check myself at the deeper depth trees to determine if any feature occurrences seemed to match the previous depth trees. That way I could justify creating those features.
+
+and for XGBoost:
+
+```
+library(xgboost)
+fit <- xgb.train(data=trmat, label=y, max.depth=1, eta=1,nthread=2,nrounds = 5, eval.metric = "logloss", objective="binary:logistic")
+xgb.plot.tree(model = fit)
+# Ran depth 2,3,4,5 trees to find reoccuring important interactions
+fit <- xgb.train(data=trmat,label=y, max.depth=5, eta=1,nthread=2,nrounds = 2, eval.metric = "logloss", objective="binary:logistic")
+xgb.plot.tree(model = fit)
+pred <- predict(fit, newdata=temat)
+importance_matrix <- xgb.importance(model = fit)
+xgb.plot.importance(importance_matrix=importance_matrix)
+```
+
+Additionally the XGBoost package in R provides an easy way to measure true feature importance for the tree. By doing so, I was able to not only generate new features visually but also quantitatively. 
+
+Through this methodology I was able to generate new features in attempts to help aid the generation of a good predicitive model.
 
 ### Predictive Modeling
 

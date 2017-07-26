@@ -19,7 +19,7 @@ library(psych)
 library(car)
 library(ggplot2)
 library(xgboost)
-library(nnet)
+
 set.seed(1)
 # Full Training Data
 df <- read.table("C:/Users/Anthony Silva/silvat/numerai/numerai_training_data.csv", header=TRUE, sep=",")
@@ -32,7 +32,6 @@ train <- subset(X, samp==TRUE)
 test <- subset(X, samp==FALSE)
 logmodel <- glm(target ~ ., data=train, family=binomial)
 test$predict <- predict(logmodel, test, type = 'response')
-#test$predict <- ifelse(predict > .5, 1, 0) # Used to get the actual values and not predicted probabilities.
 logLoss(as.numeric(test$target), as.numeric(test$predict))
 summary(logmodel)
 
@@ -42,7 +41,7 @@ fit <- rpart(target ~ . , data=X , method="class", control=rpart.control(minspli
 summary(fit)
 # Visualize the Decision Tree
 prp(fit)
-fancyRpartPlot(fit)
+fancyRpartPlot(fit, sub = "")
 
 
 # Look at the density of all the features
