@@ -92,7 +92,7 @@ fancyRpartPlot(fit, sub = "")
 ```
 The visualization that was generated was then used to located potential important features and important interactions.
 
-![simple decision tree](/images/simple_decision_tree.jpg)
+![simple decision tree](/images/simple_decision_tree.png)
 
 Important features were identified as those that repeat multiple times in the tree as a whole or on specific branches of the tree. Important interactions were identified as those features that reoccurred on branches together. I was then able to come up with additional features by feature transformation by squaring or cubing features that were found to be important and multiplying important interactions together.
 
