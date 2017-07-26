@@ -146,7 +146,7 @@ model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1)
 
 The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to overfit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 over 20 iterations through the data. The fitted model performed well but not good enough.
 
-![nn performance](/images/performance1.png)
+![nn performance](/images/performance1.PNG)
 
 As you can see, the model performed better than random guessing overall, however, it only performed better than random guessing on 66.66% of the eras in the leaderboard data. So Numerai considers my data not "consistent". I attempted to tune my model, however, even though I would reduce my overall log loss my consistency did not improve. So I was performing really well on some eras but not on others.
 
