@@ -58,7 +58,6 @@ for (i in 1:(dim(X)[2]))
 
 library(ggplot2)
 library(reshape2)
-cor(X[, !(names(X) %in% "target")])
 qplot(x=Var1, y=Var2, data=melt(cor(X[, !(names(X) %in% "target")])), fill = value, geom="tile")
 
 

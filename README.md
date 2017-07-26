@@ -38,7 +38,7 @@ print(df.isnull().sum())
 
 All of the features' values fall between the range of [0,1]. For all of the features, the distributions appear to follow a normal distribution. The density plot of feature1 describes pretty well what is seen across all features, however, with different variability and size of the "bell" in the bell curve. An example can be seen below:
 
-![feature1 distribution](https://github.com/silv6928/numerai/blob/master/images/distribution.jpg)
+![feature1 distribution](/images/distribution.jpg)
 
 Density distributions for each target value were observed for each of the features. This could help determine if the different target values followed a different distribution for any of the features.
 
@@ -54,7 +54,7 @@ for (i in 1:(dim(X)[2]))
 }
 ```
 
-![feature6 density](https://github.com/silv6928/numerai/blob/master/images/density.jpg)
+![feature6 density](/images/density.jpg)
 
 I would have hoped to have seen two different distinct normal curves. This would have told me that for a given feature we could derive a differing distribution between the target values. This could have helped generate our predictive model. However, from the plot above for each feature, the target values followed the same distribution. The next approach was to determine correlations between features.
 
@@ -75,7 +75,7 @@ plt.close()
 
 Produces the following Correlation Matrix.
 
-![correlation matrix](https://github.com/silv6928/numerai/blob/master/images/correlations.png)
+![correlation matrix](/images/correlations.png)
 
 #### Feature Engineering
 Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features.
