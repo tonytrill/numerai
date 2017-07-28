@@ -3,7 +3,7 @@
 ### email: tonysilva.ou@gmail.com
 
 ## Numerai Machine Learning Challenge
-The Numerai Machine Learning Challenge is a relatively new challenge offered by the organization Numerai. The challenge can be found on https://numer.ai. The challenge attempts to bring many different data science minds together to make predictions against the same data set. Much like Kaggle, Numerai has a leader and the opportunity to win money by using Data Science skills.
+The Numerai Machine Learning Challenge is a relatively new challenge offered by the organization Numerai. The challenge can be found on https://numer.ai. The challenge attempts to bring many different data science minds together to make predictions against the same data set. Much like Kaggle, Numerai has a leaderboard and the opportunity to win money by using Data Science skills.
 
 In the Numerai Challenge, data scientists make predictions against Numerai's encrypted hedge fund data. Numerai then ensemble's the predictions provided by the data scientists in the challenge to generate a meta model. This meta model is then used to make predictions to improve Numerai's hedge fund. From the article, [Super Intelligence for The Stock Market](https://medium.com/numerai/invisible-super-intelligence-for-the-stock-market-3c64b57b244c), "Numerai is able to combine each model into a meta model just like Random Forests combine decision trees into a forest". With this ensemble of predictions Numerai is able to perform better than any one model given to them. They are not looking for "best" overall model but they are looking for many different "good" models that helps with their overall meta model.
 
@@ -14,7 +14,7 @@ Numerai has many different criteria to assess if a data scientist's predictions 
 * Consistency - The model must perform better than .693 log loss on at least 75% of "eras".
 
 ## Machine Learning Approach
-In this project both R and Python were utilized. R was utilized more for Feature Engineering, while Python was utilized for the creation of the predictive model. Usually, I would stick with one language for a project, however, for the sake of gaining more experience I utilized both. The machine learning problem for this challenge was binary classification.
+In this project both R and Python were utilized. R was utilized more for Feature Engineering, while Python was utilized for the creation of the predictive model. Usually, I would stick with one language for a project, however, for the sake of gaining more experience I utilized both. The machine learning problem for this challenge was binary classification, predicting 0 or 1 on a target variable.
 
 ### Exploratory Data Analysis
 The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. This data set was called their "Tournament Data". The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values had roughly the same number of observations.
@@ -24,7 +24,7 @@ print(df.groupby(["target"]).count())
 ```
 
 | Target        | Count         |
-| ------------- |:-------------:|
+| :-----------: |:-------------:|
 | 0             | 62122         |
 | 1             | 62969         |
 
@@ -96,7 +96,7 @@ The visualization that was generated was then used to locate potential important
 
 Important features were identified as those that repeat multiple times in the tree as a whole or on specific branches of the tree. Important interactions were identified as those features that reoccurred on branches together. I was then able to come up with additional features by feature transformation by squaring or cubing features that were found to be important and multiplying important interactions together.
 
-A more extensive approach was taken using XGBoost. I first looked at only the 1-depth trees, then 2-depth trees, all the way to 5 depth trees. At each step in the analysis I looked for important features and important feature interactions. I made sure to check myself at the deeper depth trees to determine if any feature occurrences seemed to match the previous depth trees. That way I could justify creating those features.
+A more extensive approach was taken using XGBoost. I first looked at only the 1-depth trees, then 2-depth trees, all the way to 5 depth trees. At each step in the analysis I looked for important features and important feature interactions. I made sure to check myself at the deeper depth trees to determine if any feature occurrences seemed to match the previous depth trees. That way I could justify creating new features.
 
 and for XGBoost:
 
@@ -144,7 +144,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1)
 ```
 
-The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to overfit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 over 20 iterations through the data. The fitted model performed well but not good enough.
+The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to overfit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 samples over 20 iterations through the data. The fitted model performed well but not good enough.
 
 ![nn performance](/images/performance1.PNG)
 
@@ -164,7 +164,7 @@ Split at .5
 
 ![bad performance](/images/badperformance5.PNG)
 
-Second, I looked at which eras were performing the worst in the leaderboard data. Of those eras I added them to the training data. My hopes would be the model would not be swayed to much by these samples but just enough to promote the consistency measure in the model. I felt this was a strong the right method to use because there were only a few thousand samples compared to the 75,000 true training samples .
+Second, I looked at which eras were performing the worst in the leaderboard data. Of those eras I added them to the training data. My hopes would be the model would not be swayed to much by these samples but just enough to promote the consistency measure in the model. I felt this was the right method to use because there were only a few thousand samples compared to the 75,000 true training samples .
 
 ## Final Performance
 
