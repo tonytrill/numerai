@@ -162,7 +162,7 @@ If splitting out too much of the data the model ends up performing worse than be
 
 Split at .5
 
-![bad performance](/images/badperformance5.PNG)
+![bad performance](/images/badperformance.5.PNG)
 
 Second, I looked at which eras were performing the worst in the leaderboard data. Of those eras I added them to the training data. My hopes would be the model would not be swayed to much by these samples but just enough to promote the consistency measure in the model. I felt this was the right method to use because there were only a few thousand samples compared to the 75,000 true training samples .
 
