@@ -38,7 +38,7 @@ print(df.isnull().sum())
 
 All of the features' values fall between the range of [0,1]. For all of the features, the distributions appear to follow a normal distribution. The density plot of feature1 describes pretty well what is seen across all features, however, with different variability and size of the "bell" in the bell curve. An example can be seen below:
 
-![feature1 distribution](/images/distribution.jpg)
+![feature1 distribution](https://github.com/silv6928/numerai/blob/master/images/distribution.jpg)
 
 Density distributions for each target value were observed for each of the features. This could help determine if the different target values followed a different distribution for any of the features.
 
@@ -54,7 +54,7 @@ for (i in 1:(dim(X)[2]))
 }
 ```
 
-![feature6 density](/images/density.jpg)
+![feature6 density](https://github.com/silv6928/numerai/blob/master/images/density.jpg)
 
 I would have hoped to have seen two different distinct normal curves. This would have told me that for a given feature we could derive a differing distribution between the target values. This could have helped generate our predictive model. However, for each feature, the target values followed the same distribution. The next approach was to determine correlations between features.
 
@@ -75,7 +75,7 @@ plt.close()
 
 Produces the following Correlation Matrix.
 
-![correlation matrix](/images/correlations.png)
+![correlation matrix](https://github.com/silv6928/numerai/blob/master/images/correlations.png)
 
 #### Feature Engineering
 Unfortunately the data set was entirely encrypted and features were unnamed. This meant applying intuition around the project was impossible and generating new features would be a challenge. In order to determine important features and important interactions between features, I used a combination of a classic decision tree and XGBoost Decision Trees.
@@ -92,7 +92,7 @@ fancyRpartPlot(fit, sub = "")
 ```
 The visualization that was generated was then used to locate potential important features and important interactions.
 
-![simple decision tree](/images/simple_decision_tree.png)
+![simple decision tree](https://github.com/silv6928/numerai/blob/master/images/simple_decision_tree.png)
 
 Important features were identified as those that repeat multiple times in the tree as a whole or on specific branches of the tree. Important interactions were identified as those features that reoccurred on branches together. I was then able to come up with additional features by feature transformation by squaring or cubing features that were found to be important and multiplying important interactions together.
 
@@ -146,7 +146,7 @@ model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1)
 
 The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to over fit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 samples over 20 iterations through the data. The fitted model performed well but not good enough.
 
-![nn performance](/images/performance1.PNG)
+![nn performance](https://github.com/silv6928/numerai/blob/master/images/performance1.PNG)
 
 As you can see, the model performed better than random guessing overall, however, it only performed better than random guessing on 66.66% of the eras in the leaderboard data. So Numerai considers my data not "consistent". I attempted to tune my model, however, even though I would reduce my overall log loss my consistency did not improve. So I was performing really well on some eras but not on others.
 
@@ -156,13 +156,13 @@ In order to mitigate consistency issue I took two different approaches. First, I
 
 Split at .4
 
-![performance2](/images/performance2.PNG)
+![performance2](https://github.com/silv6928/numerai/blob/master/images/performance2.PNG)
 
 If splitting out too much of the data the model ends up performing worse than before and performs poorly on consistency.
 
 Split at .5
 
-![bad performance](/images/badperformance.5.PNG)
+![bad performance](https://github.com/silv6928/numerai/blob/master/images/badperformance.5.PNG)
 
 Second, I looked at which eras were performing the worst in the leaderboard data. Of those eras I added them to the training data. My hopes would be the model would not be swayed to much by these samples but just enough to promote the consistency measure in the model. I felt this was the right method to use because there were only a few thousand samples compared to the 75,000 true training samples .
 
@@ -170,7 +170,7 @@ Second, I looked at which eras were performing the worst in the leaderboard data
 
 After performing the methods in the previous section I was able to get the model to perform more consistent and meet all of Numerai's criteria.
 
-![performance3](/images/performance3addingvalidations.PNG)
+![performance3](https://github.com/silv6928/numerai/blob/master/images/performance3addingvalidations.PNG)
 
 Now that my model is in contention to add to Numerai's meta model, I now have to wait for Numerai to score the "live" data in order to be considered for a payout.
 
