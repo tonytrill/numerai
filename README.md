@@ -17,7 +17,7 @@ Numerai has many different criteria to assess if a data scientist's predictions 
 In this project both R and Python were utilized. R was utilized more for Feature Engineering, while Python was utilized for the creation of the predictive model. Usually, I would stick with one language for a project, however, for the sake of gaining more experience I utilized both. The machine learning problem for this challenge was binary classification, predicting 0 or 1 on a target variable.
 
 ### Exploratory Data Analysis
-The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. This data set was called their "Tournament Data". The validation data was used to utilized to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values had roughly the same number of observations.
+The data given by Numerai came in two different data sets. First, Numerai provided their "Training" data. The training data contained 108,405 observations. The second data set provided contained Numerai's "validation", "test", and "live" data. This data set was called their "Tournament Data". The validation data was used to determine position on the leaderboard. The test and live data set were used to assess performance on whether the data scientist received a payout. The training and validation data had target values labeled. The target value was labeled as 0 and 1. In the data set both target values had roughly the same number of observations.
 
 ```
 print(df.groupby(["target"]).count())
@@ -28,10 +28,10 @@ print(df.groupby(["target"]).count())
 | 0             | 62122         |
 | 1             | 62969         |
 
-Each of the data sets provided an id column, that labeled each observation. A data_type column specifying what type of observation it was: train, validation, test or live. An era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled "feature1", "feature2" ... "feature21".
+Each of the data sets provided an id column, which labeled each observation; a data_type column, specifying what type of observation it was, either train, validation, test or live; an era column, where the era specified was the time frame the observation was taken from. The challengers were told this column should not be utilized as a feature and the time frame between eras was not specified nor the distinction of what an era actually is. The data sets provided 21 features, labeled "feature1", "feature2" ... "feature21".
 
 #### Missing Values
-Thankfully there were no missing values found in the data set. I utilized the following command to find any.
+Thankfully there were no missing values found in the data set. I utilized the following command in attempts to find any missing data.
 ```
 print(df.isnull().sum())
 ```
@@ -56,7 +56,7 @@ for (i in 1:(dim(X)[2]))
 
 ![feature6 density](/images/density.jpg)
 
-I would have hoped to have seen two different distinct normal curves. This would have told me that for a given feature we could derive a differing distribution between the target values. This could have helped generate our predictive model. However, from the plot above for each feature, the target values followed the same distribution. The next approach was to determine correlations between features.
+I would have hoped to have seen two different distinct normal curves. This would have told me that for a given feature we could derive a differing distribution between the target values. This could have helped generate our predictive model. However, for each feature, the target values followed the same distribution. The next approach was to determine correlations between features.
 
 ```
 library(ggplot2)
@@ -144,13 +144,13 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1)
 ```
 
-The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to overfit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 samples over 20 iterations through the data. The fitted model performed well but not good enough.
+The Neural Network was created with Keras' Sequential Model. The NN contains an input layer, output layer and three hidden layers of various sizes. I wanted to keep the NN as basic as possible so as not to over fit the training data but still perform well enough in Numerai's eyes. The NN utilized log loss as the measure to minimize and fitted the model in batches of 100 samples over 20 iterations through the data. The fitted model performed well but not good enough.
 
 ![nn performance](/images/performance1.PNG)
 
 As you can see, the model performed better than random guessing overall, however, it only performed better than random guessing on 66.66% of the eras in the leaderboard data. So Numerai considers my data not "consistent". I attempted to tune my model, however, even though I would reduce my overall log loss my consistency did not improve. So I was performing really well on some eras but not on others.
 
-#### Sampling Re-Approach &  K-Nearest Neighbors Classifier
+#### Sampling Re-Approach & K-Nearest Neighbors Classifier
 
 In order to mitigate consistency issue I took two different approaches. First, I built a K-Nearest Neighbors Classifier to find training samples that are most like the samples in Numerai's leaderboard data. This included creating a different target variable as 0 in case a sample is in the training and 1 if the data resides in the Numerai leaderboard data. I then ran the classifier against the full training data and only selected those samples at a threshold.
 
